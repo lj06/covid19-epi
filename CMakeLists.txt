@@ -3,6 +3,11 @@ cmake_minimum_required(VERSION 3.10)
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
+set(GSL_INCLUDE_DIR "/storage/hive/project/chem-kamerlin/ljohns9/db/data/")
+set(GSL_LIBRARY_DIR "/storage/hive/project/chem-kamerlin/ljohns9/db/data/.libs")
+set(GSL_CBLAS_LIBRARY_DIR "/storage/hive/project/chem-kamerlin/ljohns9/db/data/cblas/.libs")
+include_directories(${GSL_INCLUDE_DIR})
+
 if(CMAKE_C_COMPILER_ID STREQUAL "Intel")
     set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -xHost -ipo" CACHE STRING "" FORCE)
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -xHost -ipo" CACHE STRING "" FORCE)
@@ -40,7 +45,7 @@ set(COMMON_SOURCES COV_rand.c COV_rand.h common.h distance.c distance.h interven
 add_executable(covid19 covid19.c ${COMMON_SOURCES})
 target_compile_options(covid19 PRIVATE ${ARCH_FLAGS} ${TUNE_FLAGS})
 target_compile_definitions(covid19 PRIVATE COV_GPU=0 USE_LOCALE_DISTANCE)
-target_link_libraries(covid19 PRIVATE OpenMP::OpenMP_C Threads::Threads)
+target_link_libraries(covid19 PRIVATE OpenMP::OpenMP_C Threads::Threads ${GSL_LIBRARY_DIR}/libgsl.a ${GSL_CBLAS_LIBRARY_DIR}/libgslcblas.a)
 
 if(UNIX)
     target_link_libraries(covid19 PRIVATE ${MATH_LIBS} dl)
@@ -53,7 +58,7 @@ if(CMAKE_CUDA_COMPILER)
         "$<$<COMPILE_LANGUAGE:CUDA>:--gpu-architecture=${GPU_ARCHITECTURE}>")
 
     target_compile_definitions(covid19-gpu PRIVATE COV_GPU=1 USE_LOCALE_DISTANCE)
-    target_link_libraries(covid19-gpu PRIVATE OpenMP::OpenMP_C Threads::Threads)
+    target_link_libraries(covid19-gpu PRIVATE OpenMP::OpenMP_C Threads::Threads ${GSL_LIBRARY_DIR}/libgsl.a ${GSL_CBLAS_LIBRARY_DIR}/libgslcblas.a)
 
     if(UNIX)
         target_link_libraries(covid19-gpu PRIVATE ${MATH_LIBS} dl)

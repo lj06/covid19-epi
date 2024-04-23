@@ -79,38 +79,37 @@ double population_fraction = 0; /* Fraction for adjustable interventions. */
 
 #define pi 3.14159265358979323846
 
-/* Adding in a method for considering demographic data */
-void dem_data(double *dem, int population, FILE *dem_info, int *dem_distrib){
-  int i; // counter
-  int ret, dem_sz;
+// /* Adding in a method for considering demographic data */
+// void dem_data(double *dem, int population, FILE *dem_info, int *dem_distrib){
+//   int i; // counter
+//   int ret, dem_sz;
   
-  int dem_start[] = {0, 1, 2, 3, 4 , 5};
-  double dem_dist[] = {0.05, 0.1, 0.3, 0.45, 0.8, 0.9} //PUT NUMBERS HERE WHICH CORRESPOND WITH THE DISTRIBUTION OF THESE CATEGORIES THIS NEEDS TO BE A CDF TYPE OF SITUATION
-  double *dem_dst;
+//   int dem_start[] = {0, 1, 2, 3, 4 , 5};
+//   double dem_dist[] = {0.05, 0.1, 0.3, 0.45, 0.8, 0.9} //PUT NUMBERS HERE WHICH CORRESPOND WITH THE DISTRIBUTION OF THESE CATEGORIES THIS NEEDS TO BE A CDF TYPE OF SITUATION
+//   double *dem_dst;
 
-  dem_sz = (int)(sizeof(dem_dist) / sizeof(dem_dist[0]));
-  ret = generate_inc_distr_vec(&dem_dst, dem_dist, dem_sz, "demographic");
+//   dem_sz = (int)(sizeof(dem_dist) / sizeof(dem_dist[0]));
+//   ret = generate_inc_distr_vec(&dem_dst, dem_dist, dem_sz, "demographic");
 
-  if (ret) {
-    fprintf(stderr, "Bailing out on demographic initialization\n");
-    exit(1);
-  }
+//   if (ret) {
+//     fprintf(stderr, "Bailing out on demographic initialization\n");
+//     exit(1);
+//   }
 
-  for (i = 0; i < population; i++) {
-    // Generate a random number between 0 and 1
-    double rand_num = (double)rand() / RAND_MAX;
+//   for (i = 0; i < population; i++) {
+//     // Generate a random number between 0 and 1
+//     double rand_num = (double)rand() / RAND_MAX;
 
-    int category = 0;
-      while (category < dem_sz && rand_num > dem_dist[category]){
-        category++;
-      }
+//     int category = 0;
+//       while (category < dem_sz && rand_num > dem_dist[category]){
+//         category++;
+//       }
 
-      dem[i] = dem_start[category]
+//       dem[i] = dem_start[category]
 
-  free(dem_dst);
-}
+//   free(dem_dst);
+// }
     
-
 void age_dist(double *age, int population, FILE *stats, int *age_distrib) {
   int i; // Counter
   int ret, age_sz;
